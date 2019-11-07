@@ -1,26 +1,22 @@
+var mainController = require('./src/Http/Controllers/MainController')
+
 module.exports = (fastify) => {
 
+  // Freshbooks single entry point
   fastify.route({
-    method: 'GET',
-    url: '/',
+    method: ['POST'],    
+    url: '/api/2.1/xml-in',
     schema: {
-      // request needs to have a querystring with a `name` parameter
-      querystring: {
-        name: { type: 'string' }
-      },
-      // the response needs to be an object with an `hello` property of type 'string'
-      response: {
-        200: {
-          type: 'object',
-          properties: {
-            hello: { type: 'string' }
-          }
-        }
+      headers: {
+        type: 'object',
+        properties: {
+          'Content-Type': {type: 'string', 'const': 'text/xml'},
+          'Authorization': {type: 'string'}
+        },
+        required: ['Authorization']
       }
     },
-    handler: (request, reply) => {
-      reply.send({ hello: 'world' })
-    }
+    handler: mainController
   })
 
 }
