@@ -1,0 +1,30 @@
+{
+  "name": "freshbooks-mock",
+  "version": "0.1.0",
+  "description": "HTTP server that responds like Freshbooks API",
+  "main": "server.js",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/open-zhy/freshbooks-mock.git"
+  },
+  "keywords": [
+    "freshbooks",
+    "financial",
+    "api",
+    "mock"
+  ],
+  "author": "OpenZhy Foundation",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/open-zhy/freshbooks-mock/issues"
+  },
+  "homepage": "https://github.com/open-zhy/freshbooks-mock#readme",
+  "dependencies": {
+    "fastify": "^2.10.0",
+    "minimist": "^1.2.0",
+    "minimist-options": "^4.0.2"
+  }
+}
