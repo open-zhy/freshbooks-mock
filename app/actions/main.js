@@ -20,7 +20,7 @@ module.exports = (request, reply) => {
     'payment.create': null,
   };
   if (!Object.keys(allowedMethods).includes(method)) {
-    return reply.error(`Method [${method}] is not allowed`, 403);
+    return reply.error(`Method [${method}] is not allowed`, 405);
   }
 
   if (typeof allowedMethods[method] !== 'function') {
