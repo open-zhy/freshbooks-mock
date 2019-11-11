@@ -15,7 +15,7 @@ const options = buildOptions({
     default: os.cpus().length,
   },
 
-  httpPort: {
+  'http-port': {
     type: 'number',
     alias: 'p',
     default: 21987,
@@ -36,7 +36,7 @@ defineRoutes(fastify);
 decorateFastifyReplies(fastify);
 
 // Run the server!
-fastify.listen(args.httpPort, (err) => {
+fastify.listen(args['http-port'], (err) => {
   if (err) {
     fastify.log.error(err);
     process.exit(1);
