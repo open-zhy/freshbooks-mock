@@ -1,5 +1,6 @@
 const clientService = require('../services/client');
 const paymentService = require('../services/payment');
+const invoiceService = require('../services/invoice');
 
 module.exports = (request, reply) => {
   const req = request.body.request ? request.body.request : null;
@@ -14,7 +15,7 @@ module.exports = (request, reply) => {
     'client.update': null,
     'client.list': clientService.list,
     'invoice.get': null,
-    'invoice.create': null,
+    'invoice.create': invoiceService.create,
     'invoice.update': null,
     'invoice.list': null,
     'payment.get': null,

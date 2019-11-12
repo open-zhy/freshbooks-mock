@@ -1,6 +1,11 @@
 const ServiceResponseWriter = require('../helpers/serviceResponseWriter');
 const db = require('../database');
 
+/**
+ * Create a new payment object
+ *
+ * @param {*} req
+ */
 function create(req) {
   if (!req.payment) {
     return ServiceResponseWriter.error('Request has no payment node', 400);
