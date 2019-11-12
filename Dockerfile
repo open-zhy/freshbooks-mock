@@ -14,4 +14,4 @@ RUN npm install --only=production && \
 EXPOSE 21987
 
 ENTRYPOINT ["/home/node/entrypoint.sh"]
-CMD ["./app/server.js"]
+CMD ["./app/server.js", "--secure"]
