@@ -1,7 +1,11 @@
-# freshbooks-mock
+[![Build Status](https://travis-ci.com/open-zhy/freshbooks-mock.svg?branch=master)](https://travis-ci.com/open-zhy/freshbooks-mock)
+
+freshbooks-mock
+=================
 HTTP server that responds like Freshbooks API
 
 ## Usage
+*(under construction)*
 
 ### Endpoints
 *(under construction)*
