@@ -35,11 +35,10 @@ function nextSeq(model) {
     throw new Error(`Sequence [${model}] does not exist`);
   }
 
-  const nextSeqVal = seqEntry.value();
   // update the sequence
   db.update(seqPath, (n) => n + 1).write();
 
-  return nextSeqVal;
+  return seqEntry.value();
 }
 
 

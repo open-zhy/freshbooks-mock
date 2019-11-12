@@ -1,4 +1,5 @@
 const clientService = require('../services/client');
+const paymentService = require('../services/payment');
 
 module.exports = (request, reply) => {
   const req = request.body.request ? request.body.request : null;
@@ -17,7 +18,7 @@ module.exports = (request, reply) => {
     'invoice.update': null,
     'invoice.list': null,
     'payment.get': null,
-    'payment.create': null,
+    'payment.create': paymentService.create,
   };
   if (!Object.keys(allowedMethods).includes(method)) {
     return reply.error(`Method [${method}] is not allowed`, 405);
