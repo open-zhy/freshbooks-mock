@@ -1,7 +1,7 @@
 .PHONY: build
 
 DOCKER_BUILDKIT=1
-IMAGE_NAME=open-zhy/freshbooks-mock
+IMAGE_NAME=openzhy/freshbooks-mock
 
 TAG_SHORT=$(shell git describe --tags --abbrev=0)
 
