@@ -1,6 +1,8 @@
 const Parser = require('fast-xml-parser').j2xParser;
+const pick = require('lodash.pick');
 
 const ServiceResponseWriter = require('../helpers/serviceResponseWriter');
+const Paginator = require('../helpers/paginate');
 const db = require('../database');
 const xmlParesOptions = require('../constants/xmlParseOptions');
 
@@ -33,20 +35,20 @@ function create(req) {
  */
 // eslint-disable-next-line no-unused-vars
 function list(req) {
-  // @todo give filters capabilities and make attributes dynamic
-
   const clientsModel = db.instance.get('clients');
   const parser = new Parser(xmlParesOptions);
+  const paginator = new Paginator(req);
 
-  const clientsFromDb = clientsModel.value();
-  const results = parser.parse({
-    clients: {
-      _attr_page: 1,
-      _attr_per_page: 15,
-      _attr_pages: 3,
-      client: clientsFromDb,
-    },
-  });
+  const results = parser.parse(
+    paginator.decorate(
+      'clients',
+      'client',
+      clientsModel.filter(
+        // todo: complete filter ability with: updated_from, updated_to, folder, notes
+        pick(req, ['email', 'username']),
+      ),
+    ),
+  );
 
   return ServiceResponseWriter.success(results);
 }

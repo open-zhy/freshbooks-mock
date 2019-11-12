@@ -44,7 +44,7 @@
       "first_name": "Jane",
       "last_name": "Doe",
       "organization": "ABC Corp",
-      "email": "janedoe@freshbooks.com",
+      "email": "janedoe1@freshbooks.com",
       "username": "janedoe",
       "password": "seCret!7",
       "contacts": {
@@ -84,7 +84,7 @@
       "first_name": "Jane",
       "last_name": "Doe",
       "organization": "ABC Corp",
-      "email": "janedoe@freshbooks.com",
+      "email": "janedoe2@freshbooks.com",
       "username": "janedoe",
       "password": "seCret!7",
       "contacts": {
@@ -124,7 +124,7 @@
       "first_name": "Jane",
       "last_name": "Doe",
       "organization": "ABC Corp",
-      "email": "janedoe@freshbooks.com",
+      "email": "janedoe3@freshbooks.com",
       "username": "janedoe",
       "password": "seCret!7",
       "contacts": {
