@@ -15,7 +15,7 @@ module.exports = (request, reply) => {
     'client.update': clientService.update,
     'client.list': clientService.list,
     'invoice.get': null,
-    'invoice.create': null,
+    'invoice.create': invoiceService.create,
     'invoice.update': invoiceService.update,
     'invoice.list': null,
     'payment.get': null,

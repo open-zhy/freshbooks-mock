@@ -17,7 +17,7 @@ const xmlParesOptions = require('../constants/xmlParseOptions');
  */
 function create(req) {
   if (!req.client) {
-    return ServiceResponseWriter.error('Request has no client node');
+    return ServiceResponseWriter.error('Request has no client node', 400);
   }
 
   const nextId = db.nextSeq('clients');
