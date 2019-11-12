@@ -6,7 +6,7 @@ function error(message, code = 500) {
   };
 }
 
-function success(results) {
+function success(results = '') {
   return {
     success: true,
     results,

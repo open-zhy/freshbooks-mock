@@ -1,5 +1,6 @@
 const Parser = require('fast-xml-parser').j2xParser;
 const pick = require('lodash.pick');
+const get = require('lodash.get');
 
 const ServiceResponseWriter = require('../helpers/serviceResponseWriter');
 const Paginator = require('../helpers/paginate');
@@ -53,7 +54,29 @@ function list(req) {
   return ServiceResponseWriter.success(results);
 }
 
+const update = (req) => {
+  if (!req.client) {
+    return ServiceResponseWriter.error('Request has no client node', 400);
+  }
+  const clientId = get(req, 'client.client_id');
+
+  if (!clientId) {
+    return ServiceResponseWriter.error('Request has no client_id node', 400);
+  }
+
+  try {
+    db.instance.get('clients').find({ client_id: clientId }).assign(get(req, 'client'))
+      .write();
+
+    return ServiceResponseWriter.success();
+  } catch (error) {
+    return ServiceResponseWriter.error(error.message, error.status);
+  }
+};
+
+
 module.exports = {
   create,
   list,
+  update,
 };
