@@ -13,6 +13,7 @@ function create(req) {
   }
 
   const nextId = db.nextSeq('invoices');
+
   // setup invoice data, default values
   const { invoice } = req;
 
