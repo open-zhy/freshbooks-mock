@@ -1,6 +1,8 @@
+const fs = require('fs');
+const path = require('path');
 const buildOptions = require('minimist-options');
 const minimist = require('minimist');
-const fastify = require('fastify')({ logger: true });
+const fastifyFactory = require('fastify');
 const os = require('os');
 
 const defineRoutes = require('./routes');
@@ -21,6 +23,12 @@ const options = buildOptions({
     default: 21987,
   },
 
+  secure: {
+    type: 'boolean',
+    alias: 's',
+    default: false,
+  },
+
   // Special option for positional arguments (`_` in minimist)
   arguments: 'string',
 });
@@ -28,6 +36,20 @@ const options = buildOptions({
 const args = minimist(process.argv.slice(2), options);
 
 db.init(db.instance);
+
+const fastifyOptions = {
+  logger: true,
+};
+
+if (args.secure) {
+  fastifyOptions.https = {
+    allowHTTP1: true,
+    key: fs.readFileSync(path.join(__dirname, '..', 'certs', 'fastify.key')),
+    cert: fs.readFileSync(path.join(__dirname, '..', 'certs', 'fastify.cert')),
+  };
+}
+
+const fastify = fastifyFactory(fastifyOptions);
 
 addXmlBodyParser(fastify);
 
