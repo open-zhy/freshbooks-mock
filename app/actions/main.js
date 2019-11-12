@@ -12,7 +12,7 @@ module.exports = (request, reply) => {
   const method = req['_attr_method'] || null;
   const allowedMethods = {
     'client.create': clientService.create,
-    'client.update': null,
+    'client.update': clientService.update,
     'client.list': clientService.list,
     'invoice.get': null,
     'invoice.create': invoiceService.create,
