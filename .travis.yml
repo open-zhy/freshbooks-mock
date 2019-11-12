@@ -12,9 +12,11 @@ install:
   - npm install
 before_script:
   - "cp app/database/db.sample.json app/database/db.json"
-script: npm run test
-deploy:
-  provider: script
-  script: bash scripts/docker_deploy
-  on:
-    branch: master
+script:
+  - make test
+  - make image
+after_success:
+  - if [[ "$TRAVIS_BRANCH" == "master" ]]; then
+      docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD ;
+      make deploy;
+    fi
