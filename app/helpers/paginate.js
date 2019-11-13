@@ -31,7 +31,7 @@ Paginator.prototype = {
       const data = list.drop((this.page - 1) * this.per_page).take(this.per_page);
 
       return this.combine(key0, key1, {
-        _attr_page: 1,
+        _attr_page: this.page,
         _attr_per_page: this.per_page,
         _attr_pages: Math.ceil(data.size().value() / this.per_page),
       }, data.value());
