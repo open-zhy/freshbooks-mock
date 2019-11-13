@@ -1,7 +1,9 @@
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
-// const fs = require('fs');
-// const path = require('path');
+
+// todo: the instance of database cannot support cluster topology
+// if we have more than 1 worker, the instance and the state of database
+// is messed which implies that sometime data are not peristed correctly
 
 const adapter = new FileSync('app/database/db.json');
 const db = low(adapter);
