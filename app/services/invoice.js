@@ -1,9 +1,11 @@
 const moment = require('moment-timezone');
 const get = require('lodash.get');
+const pick = require('lodash.pick');
 const Parser = require('fast-xml-parser').j2xParser;
 const ServiceResponseWriter = require('../helpers/serviceResponseWriter');
 const db = require('../database');
 const xmlParesOptions = require('../constants/xmlParseOptions');
+const Paginator = require('../helpers/paginate');
 
 
 /**
@@ -83,13 +85,19 @@ const getInvoice = (req) => {
 };
 
 const list = (req) => {
-  const options = {};
-  const invoicesModel = db.instance.get('invoices');
   try {
-    const xmlConverter = require('xml-js');
-    const results = invoicesModel.find(options).value();
-    const conversionOptions = { compact: true, ignoreComment: true, spaces: 4 };
-    xmlResult = xmlConverter.js2xml(results, conversionOptions);
+    const invoicesModel = db.instance.get('invoices');
+    const paginator = new Paginator(req);
+
+    const results = paginator.decorate(
+      'invoices',
+      'invoice',
+      invoicesModel.filter(
+        // todo: complete filter ability with: updated_from, updated_to, folder, notes
+        pick(req, ['client_id', "recurring_id", "status", "number", "notes"]),
+      ),
+    );
+    return ServiceResponseWriter.success(results);
   } catch (error) {
     return ServiceResponseWriter.error(error.message, error.status);
   }

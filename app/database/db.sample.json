@@ -161,7 +161,72 @@
       "client_id": 3
     }
   ],
-  "invoices": [],
+  "invoices": [
+    {
+      "invoice_id": 1,
+      "client_id": 1,
+      "contacts": {
+        "contact": {
+          "contact_id": "0"
+        }
+      },
+      "number": "FB00004",
+      "amount": "45.6",
+      "currency_code": "CAD",
+      "language": "en",
+      "amount_outstanding": "0",
+      "status": "paid",
+      "date": "2007-06-23",
+      "folder": "active",
+      "po_number": [],
+      "discount": 0,
+      "notes": "Due upon receipt.",
+      "terms": "Payment due in 30 days.",
+      "url": {
+        "@deprecated": "true",
+        "#text": "https://2ndsite.freshbooks.com/view/St2gThi6rA2t7RQ"
+      },
+      "auth_url": {
+        "@deprecated": "true",
+        "#text": "https://2ndsite.freshbooks.com/invoices/344"
+      },
+      "links": {
+        "client_view": "https://2ndsite.freshbooks.com/view/St2gThi6rA2t7RQ",
+        "view": "https://2ndsite.freshbooks.com/invoices/344",
+        "edit": "https://2ndsite.freshbooks.com/invoices/344/edit"
+      },
+      "return_uri": "http://www.example.com/callback",
+      "updated": "2009-08-12 09:00:00",
+      "recurring_id": 15,
+      "organization": "ABC Corp",
+      "first_name": "John",
+      "last_name": "Doe",
+      "p_street1": "123 Fake St.",
+      "p_street2": "Unit 555",
+      "p_city": "New York",
+      "p_state": "New York",
+      "p_country": "United States",
+      "p_code": 553132,
+      "vat_name": [],
+      "vat_number": [],
+      "staff_id": "1",
+      "lines": {
+        "line": {
+          "line_id": 1,
+          "amount": 40,
+          "name": "Yard work",
+          "description": "Mowed the lawn",
+          "unit_cost": 10,
+          "quantity": 4,
+          "tax1_name": "GST",
+          "tax2_name": "PST",
+          "tax1_percent": 5,
+          "tax2_percent": 8,
+          "type": "Item"
+        }
+      }
+    }
+  ],
   "payments": [
     {
       "payment_id": 1,
