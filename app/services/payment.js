@@ -1,3 +1,4 @@
+const moment = require('moment-timezone');
 const ServiceResponseWriter = require('../helpers/serviceResponseWriter');
 const db = require('../database');
 const xmlConverter = require("xml-js");
@@ -12,9 +13,15 @@ function create(req) {
         return ServiceResponseWriter.error('Request has no payment node', 400);
     }
 
+    const { payment } = req;
+
+    if (!payment.date) {
+        payment.date = moment.tz('UTC').format('YYYY-MM-DD');
+    }
+
     const nextId = db.nextSeq('payments');
     const paymentsModel = db.instance.get('payments');
-    paymentsModel.push({ ...req.payment, payment_id: nextId }).write();
+    paymentsModel.push({ ...payment, payment_id: nextId }).write();
 
     return ServiceResponseWriter.success(`<payment_id>${nextId}</payment_id>`);
 }
