@@ -1,7 +1,9 @@
 const moment = require('moment-timezone');
 const get = require('lodash.get');
+const Parser = require('fast-xml-parser').j2xParser;
 const ServiceResponseWriter = require('../helpers/serviceResponseWriter');
 const db = require('../database');
+const xmlParesOptions = require('../constants/xmlParseOptions');
 
 
 /**
@@ -63,7 +65,25 @@ const update = (req) => {
   }
 };
 
+const getInvoice = (req) => {
+  const invoiceId = get(req, 'invoice_id');
+
+  if (!invoiceId) {
+    return ServiceResponseWriter.error('Request has no invoice_id node', 400);
+  }
+
+  try {
+    const value = db.instance.get('invoices').find({ invoice_id: invoiceId }).value();
+    const parser = new Parser(xmlParesOptions);
+    const parsedValue = parser.parse(value);
+    return ServiceResponseWriter.success(`<invoice>${parsedValue}</invoice>`);
+  } catch (error) {
+    return ServiceResponseWriter.error(error.message, error.status);
+  }
+};
+
 module.exports = {
   create,
   update,
+  getInvoice,
 };
