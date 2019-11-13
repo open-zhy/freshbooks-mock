@@ -1,13 +1,14 @@
 const moment = require('moment-timezone');
 const get = require('lodash.get');
-const Parser = require('fast-xml-parser').j2xParser;
+const pick = require('lodash.pick');
 const ServiceResponseWriter = require('../helpers/serviceResponseWriter');
+const Paginator = require('../helpers/paginate');
 const db = require('../database');
-const xmlParesOptions = require('../constants/xmlParseOptions');
 
 
 /**
  * Create an new invoice object
+ * https://www.freshbooks.com/classic-api/docs/invoices#invoice.create
  *
  * @param {*} req
  */
@@ -45,6 +46,12 @@ function create(req) {
 }
 
 
+/**
+ * Update an invoice
+ * https://www.freshbooks.com/classic-api/docs/invoices#invoice.update
+ *
+ * @param {*} req
+ */
 const update = (req) => {
   if (!req.invoice) {
     return ServiceResponseWriter.error('Request has no invoice node', 400);
@@ -65,6 +72,12 @@ const update = (req) => {
   }
 };
 
+/**
+ * Fetch an invoice by its invoice_id
+ * https://www.freshbooks.com/classic-api/docs/invoices#invoice.get
+ *
+ * @param {*} req
+ */
 const getInvoice = (req) => {
   const invoiceId = get(req, 'invoice_id');
 
@@ -72,27 +85,36 @@ const getInvoice = (req) => {
     return ServiceResponseWriter.error('Request has no invoice_id node', 400);
   }
 
-  try {
-    const value = db.instance.get('invoices').find({ invoice_id: invoiceId }).value();
-    const parser = new Parser(xmlParesOptions);
-    const parsedValue = parser.parse(value);
-    return ServiceResponseWriter.success(`<invoice>${parsedValue}</invoice>`);
-  } catch (error) {
-    return ServiceResponseWriter.error(error.message, error.status);
+  const invoice = db.instance.get('invoices').find({ invoice_id: invoiceId }).value();
+
+  if (!invoice) {
+    return ServiceResponseWriter.error(`Invoice [${invoiceId}] not found`, 404);
   }
+
+  return ServiceResponseWriter.success({ invoice });
 };
 
+
+/**
+ * Search and list invoices
+ * https://www.freshbooks.com/classic-api/docs/invoices#invoice.list
+ *
+ * @param {*} req
+ */
 const list = (req) => {
-  const options = {};
   const invoicesModel = db.instance.get('invoices');
-  try {
-    const xmlConverter = require('xml-js');
-    const results = invoicesModel.find(options).value();
-    const conversionOptions = { compact: true, ignoreComment: true, spaces: 4 };
-    xmlResult = xmlConverter.js2xml(results, conversionOptions);
-  } catch (error) {
-    return ServiceResponseWriter.error(error.message, error.status);
-  }
+  const paginator = new Paginator(req);
+
+  const results = paginator.decorate(
+    'invoices',
+    'invoice',
+    invoicesModel.filter(
+      // todo: complete filter ability, see documentation for further details
+      pick(req, []),
+    ),
+  );
+
+  return ServiceResponseWriter.success(results);
 };
 
 module.exports = {
