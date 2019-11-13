@@ -39,18 +39,14 @@ function get(req) {
 
   const paymentId = req.payment_id;
   const paymentsModel = db.instance.get('payments');
-  try {
-    const payment = paymentsModel.find({ payment_id: paymentId })
-      .value();
+  const payment = paymentsModel.find({ payment_id: paymentId })
+    .value();
 
-    if (!payment) {
-      return ServiceResponseWriter.error(`payment [${paymentId}] not found`, 404);
-    }
-
-    return ServiceResponseWriter.success({ payment });
-  } catch (error) {
-    return ServiceResponseWriter.error(error.message, error.status);
+  if (!payment) {
+    return ServiceResponseWriter.error(`payment [${paymentId}] not found`, 404);
   }
+
+  return ServiceResponseWriter.success({ payment });
 }
 
 module.exports = {

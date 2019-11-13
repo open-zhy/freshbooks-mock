@@ -62,14 +62,15 @@ const update = (req) => {
     return ServiceResponseWriter.error('Request has no invoice_id node', 400);
   }
 
-  try {
-    db.instance.get('invoices').find({ invoice_id: invoiceId }).assign(get(req, 'invoice'))
-      .write();
+  const invoice = db.instance.get('invoices').find({ invoice_id: invoiceId });
 
-    return ServiceResponseWriter.success();
-  } catch (error) {
-    return ServiceResponseWriter.error(error.message, error.status);
+  if (invoice.isEmpty().value()) {
+    return ServiceResponseWriter.error(`Invoice [${invoiceId}] not found`, 404);
   }
+
+  invoice.assign(req.invoice).write();
+
+  return ServiceResponseWriter.success();
 };
 
 /**

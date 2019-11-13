@@ -87,14 +87,15 @@ const update = (req) => {
     return ServiceResponseWriter.error('Request has no client_id node', 400);
   }
 
-  try {
-    db.instance.get('clients').find({ client_id: clientId }).assign(get(req, 'client'))
-      .write();
+  const client = db.instance.get('clients').find({ client_id: clientId });
 
-    return ServiceResponseWriter.success();
-  } catch (error) {
-    return ServiceResponseWriter.error(error.message, error.status);
+  if (client.isEmpty().value()) {
+    return ServiceResponseWriter.error(`Client [${clientId}] not found`, 404);
   }
+
+  client.assign(req.client).write();
+
+  return ServiceResponseWriter.success();
 };
 
 
