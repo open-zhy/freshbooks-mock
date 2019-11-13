@@ -103,22 +103,18 @@ const getInvoice = (req) => {
  * @param {*} req
  */
 const list = (req) => {
-  try {
-    const invoicesModel = db.instance.get('invoices');
-    const paginator = new Paginator(req);
+  const invoicesModel = db.instance.get('invoices');
+  const paginator = new Paginator(req);
 
-    const results = paginator.decorate(
-      'invoices',
-      'invoice',
-      invoicesModel.filter(
-        // todo: complete filter ability with: updated_from, updated_to
-        pick(req, ['client_id', "recurring_id", "status", "number", "notes"]),
-      ),
-    );
-    return ServiceResponseWriter.success(results);
-  } catch (error) {
-    return ServiceResponseWriter.error(error.message, error.status);
-  }
+  const results = paginator.decorate(
+    'invoices',
+    'invoice',
+    invoicesModel.filter(
+      // todo: complete filter ability with: updated_from, updated_to
+      pick(req, ['client_id', 'recurring_id', 'status', 'number', 'notes']),
+    ),
+  );
+  return ServiceResponseWriter.success(results);
 };
 
 module.exports = {
