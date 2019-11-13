@@ -1,11 +1,9 @@
-const Parser = require('fast-xml-parser').j2xParser;
 const pick = require('lodash.pick');
 const get = require('lodash.get');
 
 const ServiceResponseWriter = require('../helpers/serviceResponseWriter');
 const Paginator = require('../helpers/paginate');
 const db = require('../database');
-const xmlParesOptions = require('../constants/xmlParseOptions');
 
 
 /**
@@ -29,7 +27,7 @@ function create(req) {
 
 /**
  * List all clients
- * https://www.freshbooks.com/classic-api/docs/clients
+ * https://www.freshbooks.com/classic-api/docs/clients#client.list
  * @param {*} req
  *
  * @returns {object} The service response object
@@ -37,23 +35,26 @@ function create(req) {
 // eslint-disable-next-line no-unused-vars
 function list(req) {
   const clientsModel = db.instance.get('clients');
-  const parser = new Parser(xmlParesOptions);
   const paginator = new Paginator(req);
 
-  const results = parser.parse(
-    paginator.decorate(
-      'clients',
-      'client',
-      clientsModel.filter(
-        // todo: complete filter ability with: updated_from, updated_to, folder, notes
-        pick(req, ['email', 'username']),
-      ),
+  const results = paginator.decorate(
+    'clients',
+    'client',
+    clientsModel.filter(
+      // todo: complete filter ability with: updated_from, updated_to, folder, notes
+      pick(req, ['email', 'username']),
     ),
   );
 
   return ServiceResponseWriter.success(results);
 }
 
+/**
+ * Update a client object
+ * https://www.freshbooks.com/classic-api/docs/clients#client.update
+ *
+ * @param {*} req
+ */
 const update = (req) => {
   if (!req.client) {
     return ServiceResponseWriter.error('Request has no client node', 400);

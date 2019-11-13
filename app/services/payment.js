@@ -1,52 +1,58 @@
 const moment = require('moment-timezone');
 const ServiceResponseWriter = require('../helpers/serviceResponseWriter');
 const db = require('../database');
-const xmlConverter = require("xml-js");
 
 /**
  * Create a new payment object
+ * https://www.freshbooks.com/classic-api/docs/payments#payment.create
  *
  * @param {*} req
  */
 function create(req) {
-    if (!req.payment) {
-        return ServiceResponseWriter.error('Request has no payment node', 400);
-    }
+  if (!req.payment) {
+    return ServiceResponseWriter.error('Request has no payment node', 400);
+  }
 
-    const { payment } = req;
+  const { payment } = req;
 
-    if (!payment.date) {
-        payment.date = moment.tz('UTC').format('YYYY-MM-DD');
-    }
+  if (!payment.date) {
+    payment.date = moment.tz('UTC').format('YYYY-MM-DD');
+  }
 
-    const nextId = db.nextSeq('payments');
-    const paymentsModel = db.instance.get('payments');
-    paymentsModel.push({ ...payment, payment_id: nextId }).write();
+  const nextId = db.nextSeq('payments');
+  const paymentsModel = db.instance.get('payments');
+  paymentsModel.push({ ...payment, payment_id: nextId }).write();
 
-    return ServiceResponseWriter.success(`<payment_id>${nextId}</payment_id>`);
+  return ServiceResponseWriter.success(`<payment_id>${nextId}</payment_id>`);
 }
 
+/**
+ * Fetch a payment object
+ * https://www.freshbooks.com/classic-api/docs/payments#payment.get
+ *
+ * @param {*} req
+ */
 function get(req) {
-    if (!req.payment_id) {
-        return ServiceResponseWriter.error('Request has no payment id', 400);
+  if (!req.payment_id) {
+    return ServiceResponseWriter.error('Request has no payment id', 400);
+  }
+
+  const paymentId = req.payment_id;
+  const paymentsModel = db.instance.get('payments');
+  try {
+    const payment = paymentsModel.find({ payment_id: paymentId })
+      .value();
+
+    if (!payment) {
+      return ServiceResponseWriter.error(`payment [${paymentId}] not found`, 404);
     }
 
-    const paymentId = req.payment_id;
-    const paymentsModel = db.instance.get('payments');
-    try {
-        var payment = paymentsModel.find({ payment_id: paymentId })
-            .value();
-        var conversionOptions = { compact: true, ignoreComment: true, spaces: 4 };
-        var paymentResult = xmlConverter.js2xml(payment, conversionOptions)
-        return ServiceResponseWriter.success(paymentResult);
-    } catch (error) {
-        return ServiceResponseWriter.error(error.message, error.status);
-    }
-
+    return ServiceResponseWriter.success({ payment });
+  } catch (error) {
+    return ServiceResponseWriter.error(error.message, error.status);
+  }
 }
 
 module.exports = {
-    create, get
+  create, get,
 };
-
-
