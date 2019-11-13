@@ -1,3 +1,3 @@
-const tap = require('tap')
+const tap = require('tap');
 
-tap.pass('this is fine')
+tap.pass('this is fine');
