@@ -162,7 +162,23 @@
     }
   ],
   "invoices": [],
-  "payments": [],
+  "payments": [
+    {
+      "payment_id": 1,
+      "client_id": 1,
+      "invoice_id": 1,
+      "date": "2019-11-30 00: 00: 00",
+      "amount": 37,
+      "currency_code": "USD",
+      "type": "VISA",
+      "note": "Portal Payment November",
+      "updated": "2019-11-30 04: 00: 00",
+      "gateway_transaction": {
+        "reference_id": 1,
+        "gateway_name": "Auhtorize.Net"
+      }
+    }
+  ],
   "seq": {
     "clients": 4,
     "invoices": 0,
