@@ -18,7 +18,7 @@ module.exports = (request, reply) => {
     'invoice.create': invoiceService.create,
     'invoice.update': null,
     'invoice.list': null,
-    'payment.get': null,
+    'payment.get': paymentService.get,
     'payment.create': paymentService.create,
   };
   if (!Object.keys(allowedMethods).includes(method)) {
