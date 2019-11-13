@@ -35,6 +35,10 @@ const options = buildOptions({
 
 const args = minimist(process.argv.slice(2), options);
 
+// todo: here we still enforce workers to always be 1
+// to avoid issue with database instance
+args.workers = 1;
+
 db.init(db.instance);
 
 const fastifyOptions = {

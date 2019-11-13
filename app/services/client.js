@@ -26,6 +26,28 @@ function create(req) {
 }
 
 /**
+ * Fetch a client by its client_id
+ * https://www.freshbooks.com/classic-api/docs/clients#client.get
+ *
+ * @param {*} req
+ */
+const getClient = (req) => {
+  const clientId = get(req, 'client_id');
+
+  if (!clientId) {
+    return ServiceResponseWriter.error('Request has no client_id node', 400);
+  }
+
+  const client = db.instance.get('clients').find({ client_id: clientId }).value();
+
+  if (!client) {
+    return ServiceResponseWriter.error(`Client [${clientId}] not found`, 404);
+  }
+
+  return ServiceResponseWriter.success({ client });
+};
+
+/**
  * List all clients
  * https://www.freshbooks.com/classic-api/docs/clients#client.list
  * @param {*} req
@@ -65,19 +87,21 @@ const update = (req) => {
     return ServiceResponseWriter.error('Request has no client_id node', 400);
   }
 
-  try {
-    db.instance.get('clients').find({ client_id: clientId }).assign(get(req, 'client'))
-      .write();
+  const client = db.instance.get('clients').find({ client_id: clientId });
 
-    return ServiceResponseWriter.success();
-  } catch (error) {
-    return ServiceResponseWriter.error(error.message, error.status);
+  if (client.isEmpty().value()) {
+    return ServiceResponseWriter.error(`Client [${clientId}] not found`, 404);
   }
+
+  client.assign(req.client).write();
+
+  return ServiceResponseWriter.success();
 };
 
 
 module.exports = {
   create,
   list,
+  getClient,
   update,
 };

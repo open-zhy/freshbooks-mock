@@ -1,15 +1,14 @@
 const moment = require('moment-timezone');
 const get = require('lodash.get');
 const pick = require('lodash.pick');
-const Parser = require('fast-xml-parser').j2xParser;
 const ServiceResponseWriter = require('../helpers/serviceResponseWriter');
-const db = require('../database');
-const xmlParesOptions = require('../constants/xmlParseOptions');
 const Paginator = require('../helpers/paginate');
+const db = require('../database');
 
 
 /**
  * Create an new invoice object
+ * https://www.freshbooks.com/classic-api/docs/invoices#invoice.create
  *
  * @param {*} req
  */
@@ -47,6 +46,12 @@ function create(req) {
 }
 
 
+/**
+ * Update an invoice
+ * https://www.freshbooks.com/classic-api/docs/invoices#invoice.update
+ *
+ * @param {*} req
+ */
 const update = (req) => {
   if (!req.invoice) {
     return ServiceResponseWriter.error('Request has no invoice node', 400);
@@ -57,16 +62,23 @@ const update = (req) => {
     return ServiceResponseWriter.error('Request has no invoice_id node', 400);
   }
 
-  try {
-    db.instance.get('invoices').find({ invoice_id: invoiceId }).assign(get(req, 'invoice'))
-      .write();
+  const invoice = db.instance.get('invoices').find({ invoice_id: invoiceId });
 
-    return ServiceResponseWriter.success();
-  } catch (error) {
-    return ServiceResponseWriter.error(error.message, error.status);
+  if (invoice.isEmpty().value()) {
+    return ServiceResponseWriter.error(`Invoice [${invoiceId}] not found`, 404);
   }
+
+  invoice.assign(req.invoice).write();
+
+  return ServiceResponseWriter.success();
 };
 
+/**
+ * Fetch an invoice by its invoice_id
+ * https://www.freshbooks.com/classic-api/docs/invoices#invoice.get
+ *
+ * @param {*} req
+ */
 const getInvoice = (req) => {
   const invoiceId = get(req, 'invoice_id');
 
@@ -74,16 +86,22 @@ const getInvoice = (req) => {
     return ServiceResponseWriter.error('Request has no invoice_id node', 400);
   }
 
-  try {
-    const value = db.instance.get('invoices').find({ invoice_id: invoiceId }).value();
-    const parser = new Parser(xmlParesOptions);
-    const parsedValue = parser.parse(value);
-    return ServiceResponseWriter.success(`<invoice>${parsedValue}</invoice>`);
-  } catch (error) {
-    return ServiceResponseWriter.error(error.message, error.status);
+  const invoice = db.instance.get('invoices').find({ invoice_id: invoiceId }).value();
+
+  if (!invoice) {
+    return ServiceResponseWriter.error(`Invoice [${invoiceId}] not found`, 404);
   }
+
+  return ServiceResponseWriter.success({ invoice });
 };
 
+
+/**
+ * Search and list invoices
+ * https://www.freshbooks.com/classic-api/docs/invoices#invoice.list
+ *
+ * @param {*} req
+ */
 const list = (req) => {
   try {
     const invoicesModel = db.instance.get('invoices');
@@ -93,7 +111,7 @@ const list = (req) => {
       'invoices',
       'invoice',
       invoicesModel.filter(
-        // todo: complete filter ability with: updated_from, updated_to, folder, notes
+        // todo: complete filter ability with: updated_from, updated_to
         pick(req, ['client_id', "recurring_id", "status", "number", "notes"]),
       ),
     );

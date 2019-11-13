@@ -11,13 +11,19 @@ module.exports = (request, reply) => {
   /* eslint-disable dot-notation */
   const method = req['_attr_method'] || null;
   const allowedMethods = {
+    // client
     'client.create': clientService.create,
+    'client.get': clientService.getClient,
     'client.update': clientService.update,
     'client.list': clientService.list,
+
+    // invoice
     'invoice.get': invoiceService.getInvoice,
     'invoice.create': invoiceService.create,
     'invoice.update': invoiceService.update,
     'invoice.list': invoiceService.list,
+
+    // payment
     'payment.get': paymentService.get,
     'payment.create': paymentService.create,
   };
