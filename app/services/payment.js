@@ -33,12 +33,16 @@ function get(req) {
 
     const paymentId = req.payment_id;
     const paymentsModel = db.instance.get('payments');
+    try {
+        var payment = paymentsModel.find({ payment_id: paymentId })
+            .value();
+        var conversionOptions = { compact: true, ignoreComment: true, spaces: 4 };
+        var paymentResult = xmlConverter.js2xml(payment, conversionOptions)
+        return ServiceResponseWriter.success(paymentResult);
+    } catch (error) {
+        return ServiceResponseWriter.error(error.message, error.status);
+    }
 
-    var payment = paymentsModel.find({ payment_id: paymentId })
-        .value();
-    var conversionOptions = { compact: true, ignoreComment: true, spaces: 4 };
-    var paymentResult = xmlConverter.js2xml(payment, conversionOptions)
-    return ServiceResponseWriter.success(paymentResult);
 }
 
 module.exports = {

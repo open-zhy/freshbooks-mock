@@ -81,9 +81,26 @@ const getInvoice = (req) => {
     return ServiceResponseWriter.error(error.message, error.status);
   }
 };
+const list = (req) => {
+  let options = {}
+  const invoicesModel = db.instance.get('invoices');
+  try {
+
+    const xmlConverter = require("xml-js");
+    let results = invoicesModel.find(options).value();
+    var conversionOptions = { compact: true, ignoreComment: true, spaces: 4 };
+    xmlResult = xmlConverter.js2xml(results, conversionOptions)
+
+  } catch (error) {
+    return ServiceResponseWriter.error(error.message, error.status);
+  }
+
+
+}
 
 module.exports = {
   create,
   update,
   getInvoice,
+  list
 };
