@@ -183,11 +183,11 @@
       "notes": "Due upon receipt.",
       "terms": "Payment due in 30 days.",
       "url": {
-        "@deprecated": "true",
+        "_attr_deprecated": "true",
         "#text": "https://2ndsite.freshbooks.com/view/St2gThi6rA2t7RQ"
       },
       "auth_url": {
-        "@deprecated": "true",
+        "_attr_deprecated": "true",
         "#text": "https://2ndsite.freshbooks.com/invoices/344"
       },
       "links": {
@@ -261,7 +261,7 @@
   ],
   "seq": {
     "clients": 4,
-    "invoices": 0,
-    "payments": 0
+    "invoices": 1,
+    "payments": 2
   }
 }
