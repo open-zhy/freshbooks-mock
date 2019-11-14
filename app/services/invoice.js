@@ -110,7 +110,7 @@ const list = (req) => {
     'invoices',
     'invoice',
     invoicesModel.filter(
-      // todo: complete filter ability with: updated_from, updated_to
+      // todo: complete filter ability with: date_from, date_to, updated_from, updated_to
       pick(req, ['client_id', 'recurring_id', 'status', 'number', 'notes']),
     ),
   );
