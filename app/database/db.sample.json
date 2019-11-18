@@ -163,19 +163,19 @@
   ],
   "invoices": [
     {
-      "invoice_id": 1,
+      "invoice_id": "00000633766",
       "client_id": 1,
       "contacts": {
         "contact": {
           "contact_id": "0"
         }
       },
-      "number": "FB00004",
+      "number": "0000035",
       "amount": "45.6",
       "currency_code": "CAD",
       "language": "en",
       "amount_outstanding": "0",
-      "status": "paid",
+      "status": "draft",
       "date": "2007-06-23",
       "folder": "active",
       "po_number": [],
@@ -231,7 +231,7 @@
     {
       "payment_id": 1,
       "client_id": 1,
-      "invoice_id": 1,
+      "invoice_id": "00000633766",
       "date": "2019-11-30 00: 00: 00",
       "amount": 37,
       "currency_code": "USD",
