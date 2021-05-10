@@ -28,7 +28,7 @@
     "fast-xml-parser": "^3.14.0",
     "fastify": "^2.15.1",
     "fastify-xml-body-parser": "^1.0.4",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "lodash.clonedeep": "^4.5.0",
     "lodash.get": "^4.4.2",
     "lodash.isarray": "^4.0.0",
